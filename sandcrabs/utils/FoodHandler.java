@@ -47,22 +47,23 @@ public class FoodHandler {
 	public boolean eatFood() {
 		
 		Variables.get().ateFood = false;
-		
+
 		for (RSItem item : Inventory.getAll())
-			if (foodID == item.getID())
-				if (item.click("Eat")) {
-					if (Timing.waitCondition(new Condition() {
-						@Override
-						public boolean active() {
-							General.sleep(100);
-							return Variables.get().ateFood; // This will return true when a server message is received saying the food was eaten
-						}
-					}, General.random(1200, 1800))) {
-						General.sleep(150, 300);
-					}
-					return true;
+			if (foodID == item.getID() && item.click("Eat") && Timing.waitCondition(new Condition() {
+				@Override
+				public boolean active() {
+					General.sleep(100);
+					return Variables.get().ateFood; // This will return true when a server message is received saying
+													// the food was eaten
 				}
+			}, General.random(1200, 1800))) {
+				General.sleep(150, 300);
+				return true;
+			}
+
 		return false;
+
 	}
 
 }
+

@@ -1,19 +1,24 @@
 package scripts.crabs.utils;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.tribot.api.DynamicClicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
+import org.tribot.api.types.generic.Filter;
 import org.tribot.api2007.Combat;
 import org.tribot.api2007.NPCChat;
 import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.Players;
+import org.tribot.api2007.ext.Filters;
 import org.tribot.api2007.types.RSArea;
 import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSObject;
+import org.tribot.api2007.types.RSPlayer;
 import org.tribot.api2007.types.RSTile;
 
 import scripts.acamera.ACamera;
@@ -57,8 +62,16 @@ public class SandCrabUtility {
 		return NPCs.find(SAND_CRAB_IDS);
 	}
 	
+	public static RSNPC[] getAllCrabs(Filter<RSNPC> filter) {
+		return NPCs.find(filter.combine(Filters.NPCs.idEquals(SAND_CRAB_IDS), true));
+	}
+	
 	public static RSNPC[] getAllRocks() {
 		return NPCs.find(SAND_ROCKS_IDS);
+	}
+	
+	public static RSNPC[] getAllRocks(Filter<RSNPC> filter) {
+		return NPCs.find(filter.combine(Filters.NPCs.idEquals(SAND_ROCKS_IDS), true));
 	}
 	
 	/**
@@ -138,13 +151,12 @@ public class SandCrabUtility {
 	 * @return A sand crab RSNPC that is located in a 3x3 box around the player. Returns null if there are none.
 	 */
 	public static RSNPC getNearbySandCrab() {
-		RSArea aggroArea = getAggroArea();
-		for (RSNPC npc : getAllCrabs())
-			if (aggroArea.contains(npc) && npc.getHealthPercent() != 0)
+		for (RSNPC npc : getAllCrabs(Filters.NPCs.inArea(getAggroArea())))
+			if (npc.getHealthPercent() != 0)
 				return npc;
 		return null;
 	}
-	
+
 	/**
 	 * Checks if we should attack a sand crab
 	 * @return Whether or not we should attack a sand crab
@@ -284,6 +296,31 @@ public class SandCrabUtility {
 				return Player.getPosition().distanceTo(tile) < 5 || !Player.isMoving();
 			}
 		}, General.random(2000, 2800));
+	}
+	
+	/**
+	 * Checks if there is a player standing in the same location as us.
+	 * @return True if there is a player under us, false if there isn't.
+	 */
+	public static boolean isPlayerUnderUs() {
+		for (RSPlayer p : Players.getAll()) 
+			if (p.getPosition().equals(Player.getPosition()))
+				return true;
+		
+		return false;
+	}
+	
+	/**
+	 * Finds all players standing under us.
+	 * @return An RSPlayer array of all players standing under us.
+	 */
+	public static RSPlayer[] getPlayersUnderUs() {
+		ArrayList<RSPlayer> players = new ArrayList<RSPlayer>();
+		for (RSPlayer p : Players.getAll()) 
+			if (p.getPosition().equals(Player.getPosition()))
+				players.add(p);
+		
+		return players.toArray(new RSPlayer[players.size()]);
 	}
 
 }

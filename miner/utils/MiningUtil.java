@@ -41,27 +41,7 @@ public class MiningUtil {
 	}
 	
 	public static int[] getRockIDs(String rockName) {
-		switch (rockName) {
-		case "Copper":
-			return MiningConstants.COPPER;
-		case "Tin":
-			return MiningConstants.TIN;
-		case "Iron":
-			return MiningConstants.IRON;
-		case "Clay":
-			return MiningConstants.CLAY;
-		case "Coal":
-			return MiningConstants.COAL;
-		case "Gold":
-			return MiningConstants.GOLD;
-		case "Mithril":
-			return MiningConstants.MITHRIL;
-		case "Adamant":
-			return MiningConstants.ADAMANT;
-		case "Rune":
-			return MiningConstants.RUNE;
-		}
-		return null;
+		return MiningConstants.ROCKS.valueOf(rockName.toUpperCase()).getIds();
 	}
 	
 	public static boolean isRockValid(RSObject rock) {
@@ -76,7 +56,7 @@ public class MiningUtil {
 		RSObject[] rocks = Objects.find(15, filter);
 		
 		for (RSObject object : rocks) 
-			for (int id : MiningConstants.EMPTY_ROCKS) 
+			for (int id : MiningConstants.ROCKS.EMPTY.getIds()) 
 				if (id == object.getID())
 					return false;
 		
@@ -112,7 +92,7 @@ public class MiningUtil {
 		if (interactingRock == null)
 			return false;
 		
-		for (int i : MiningConstants.EMPTY_ROCKS)
+		for (int i : MiningConstants.ROCKS.EMPTY.getIds())
 			if (i == interactingRock.getID())
 				return true;
 		

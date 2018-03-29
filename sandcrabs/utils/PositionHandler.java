@@ -58,7 +58,7 @@ public class PositionHandler {
 	public void moveToCrabTile() {
 		if (!getCrabTile().isOnScreen() || !getCrabTile().isClickable())
 			Camera.turnToTile(getCrabTile());
-		else if (getCrabTile().isOnScreen() && getCrabTile().isClickable()) {
+		else {
 			if (DynamicClicking.clickRSTile(getCrabTile(), "Walk here")) {
 				// Wait until we start moving
 				Timing.waitCondition(new Condition() {

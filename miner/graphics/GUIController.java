@@ -42,7 +42,7 @@ public class GUIController implements Initializable {
 	@DoNotRename @FXML
 	private ComboBox<String> rock, settingsBox;
 
-	private String[] rockTypes = MiningConstants.ROCKS;
+	private String[] rockTypes = MiningConstants.ROCK_NAMES;
 	
 	@DoNotRename @FXML
 	private CheckBox bank, hop;
